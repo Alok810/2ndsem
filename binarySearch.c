@@ -1,7 +1,4 @@
-// Binary Search in C
-
 #include <stdio.h>
-
 int binarySearch(int array[], int x, int low, int high) {
   if (high >= low) {
     int mid = low + (high - low) / 2;
