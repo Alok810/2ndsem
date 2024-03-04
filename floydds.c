@@ -1,43 +1,50 @@
+// Floyd-Warshall Algorithm in C
+
 #include <stdio.h>
 
-#define V 4 
+// defining the number of vertices
+#define nV 4
 
-#define INF 99999
+#define INF 999
 
-void floydWarshall(int graph[V][V]) {
-    int dist[V][V];
+void printMatrix(int matrix[][nV]);
 
-    for (int i = 0; i < V; i++)
-        for (int j = 0; j < V; j++)
-            dist[i][j] = graph[i][j];
+// Implementing floyd warshall algorithm
+void floydWarshall(int graph[][nV]) {
+  int matrix[nV][nV], i, j, k;
 
-    for (int k = 0; k < V; k++)
-        for (int i = 0; i < V; i++)
-            for (int j = 0; j < V; j++)
-                if (dist[i][k] + dist[k][j] < dist[i][j])
-                    dist[i][j] = dist[i][k] + dist[k][j];
+  for (i = 0; i < nV; i++)
+    for (j = 0; j < nV; j++)
+      matrix[i][j] = graph[i][j];
 
-    printf("Shortest Path Matrix:\n");
-    for (int i = 0; i < V; i++) {
-        for (int j = 0; j < V; j++) {
-            if (dist[i][j] == INF)
-                printf("INF\t");
-            else
-                printf("%d\t", dist[i][j]);
-        }
-        printf("\n");
+  // Adding vertices individually
+  for (k = 0; k < nV; k++) {
+    for (i = 0; i < nV; i++) {
+      for (j = 0; j < nV; j++) {
+        if (matrix[i][k] + matrix[k][j] < matrix[i][j])
+          matrix[i][j] = matrix[i][k] + matrix[k][j];
+      }
     }
+  }
+  printMatrix(matrix);
+}
+
+void printMatrix(int matrix[][nV]) {
+  for (int i = 0; i < nV; i++) {
+    for (int j = 0; j < nV; j++) {
+      if (matrix[i][j] == INF)
+        printf("%4s", "INF");
+      else
+        printf("%4d", matrix[i][j]);
+    }
+    printf("\n");
+  }
 }
 
 int main() {
-    int graph[V][V] = {
-        {0, 5, INF, 10},
-        {INF, 0, 3, INF},
-        {INF, INF, 0, 1},
-        {INF, INF, INF, 0}
-    };
-
-    floydWarshall(graph);
-
-    return 0;
+  int graph[nV][nV] = {{0, 3, INF, 5},
+             {2, 0, INF, 4},
+             {INF, 1, 0, INF},
+             {INF, INF, 2, 0}};
+  floydWarshall(graph);
 }
